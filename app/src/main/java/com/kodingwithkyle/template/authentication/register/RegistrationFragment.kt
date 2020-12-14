@@ -26,7 +26,6 @@ class RegistrationFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(RegistrationViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }
