@@ -10,10 +10,12 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import com.kodingwithkyle.template.R
+import com.kodingwithkyle.template.authentication.register.RegistrationFragment
 
 class SignInFragment : Fragment() {
 
     companion object {
+        const val TAG = "SignInFragment"
         fun newInstance() = SignInFragment()
     }
 
@@ -39,6 +41,20 @@ class SignInFragment : Fragment() {
                 viewModel.updatePassword(it.trim().toString())
             }
         }
+
+        mSignInButton.setOnClickListener {
+            viewModel.handleSignInButtonClick()
+        }
+
+        view.findViewById<Button>(R.id.register_btn).setOnClickListener {
+            fragmentManager?.apply {
+                beginTransaction()
+                    .add(R.id.container, RegistrationFragment.newInstance())
+                    .addToBackStack(RegistrationFragment.TAG)
+                    .commit()
+            }
+        }
+
         return view
     }
 

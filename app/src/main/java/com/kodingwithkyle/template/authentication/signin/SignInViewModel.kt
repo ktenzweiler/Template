@@ -27,4 +27,8 @@ class SignInViewModel : ViewModel() {
                     and (mPasswordText.length > 5)
         )
     }
+
+    fun handleSignInButtonClick() {
+        // make backend api request to login
+    }
 }
