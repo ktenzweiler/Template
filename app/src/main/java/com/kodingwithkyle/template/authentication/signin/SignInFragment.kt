@@ -46,6 +46,10 @@ class SignInFragment : Fragment() {
             viewModel.handleSignInButtonClick()
         }
 
+        view.findViewById<Button>(R.id.logout_btn).setOnClickListener {
+            viewModel.handleLogoutClick()
+        }
+
         view.findViewById<Button>(R.id.register_btn).setOnClickListener {
             fragmentManager?.apply {
                 beginTransaction()
