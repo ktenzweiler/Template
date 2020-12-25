@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import com.kodingwithkyle.template.R
+import com.kodingwithkyle.template.authentication.data.AppDatabase
+import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 
 class RegistrationFragment : Fragment() {
 
@@ -18,7 +21,10 @@ class RegistrationFragment : Fragment() {
         fun newInstance() = RegistrationFragment()
     }
 
-    private lateinit var viewModel: RegistrationViewModel
+    private val viewModel: RegistrationViewModel by viewModels {
+        RegistrationVMFactory(UserRepo(AppDatabase.getInstance(requireContext()).userDao()))
+    }
+
     private lateinit var mRegisterButton : Button
 
     override fun onCreateView(
@@ -50,6 +56,10 @@ class RegistrationFragment : Fragment() {
             viewModel.handleRegisterButtonClick()
         }
 
+        view.findViewById<Button>(R.id.fetch_user_btn).setOnClickListener {
+            viewModel.fetchUser()
+        }
+
         view.findViewById<Button>(R.id.cancel_btn).setOnClickListener {
             fragmentManager?.apply {
                 popBackStack()
@@ -60,7 +70,6 @@ class RegistrationFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(RegistrationViewModel::class.java)
         viewModel.isRegisterButtonEnabled.observe(viewLifecycleOwner) {
             mRegisterButton.isEnabled = it
         }
