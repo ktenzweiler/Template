@@ -4,11 +4,12 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 import com.kodingwithkyle.template.authentication.services.AuthenticationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class RegistrationViewModel : ViewModel() {
+class RegistrationViewModel internal constructor(private val mUserRepo: UserRepo) : ViewModel() {
 
     val isRegisterButtonEnabled = MutableLiveData(false)
     private var mEmailText = ""
@@ -36,7 +37,8 @@ class RegistrationViewModel : ViewModel() {
             val response = service.registerNewUser(mEmailText, mPasswordText)
             if (response.isSuccessful) {
                 response.body()?.let {
-                    Log.d("USER", "user id = ${it._id} email = ${it.email}")
+                    it.isSelf = true
+                    mUserRepo.insertUser(it)
                 }
             } else {
                 Log.d("USER", "Error msg = ${response.message()}")
@@ -52,5 +54,14 @@ class RegistrationViewModel : ViewModel() {
                     and (mPasswordText.length > 5)
                     and (mConfirmedPasswordText == mPasswordText)
         )
+    }
+
+    fun fetchUser() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = mUserRepo.fetchSelf()
+            user?.let {
+                Log.d("USER", "fetched myself from db email = ${it.email} isSelf = ${it.isSelf} auth token = ${it.authToken}")
+            }
+        }
     }
 }
