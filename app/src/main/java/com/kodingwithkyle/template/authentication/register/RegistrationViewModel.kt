@@ -16,17 +16,17 @@ class RegistrationViewModel internal constructor(private val mUserRepo: UserRepo
     private var mPasswordText = ""
     private var mConfirmedPasswordText = ""
 
-    fun updateEmail(email: String) {
+    fun handleEmailTextChanged(email: String) {
         mEmailText = email
         checkIsRegisterButtonEnabled()
     }
 
-    fun updatePassword(password: String) {
+    fun handlePasswordTextChanged(password: String) {
         mPasswordText = password
         checkIsRegisterButtonEnabled()
     }
 
-    fun updateConfirmedPassword(confirmedPassword: String) {
+    fun handleConfirmedPasswordTextChanged(confirmedPassword: String) {
         mConfirmedPasswordText = confirmedPassword
         checkIsRegisterButtonEnabled()
     }
@@ -41,6 +41,7 @@ class RegistrationViewModel internal constructor(private val mUserRepo: UserRepo
                     mUserRepo.insertUser(it)
                 }
             } else {
+                // show error message
                 Log.d("USER", "Error msg = ${response.message()}")
             }
         }
@@ -54,14 +55,5 @@ class RegistrationViewModel internal constructor(private val mUserRepo: UserRepo
                     and (mPasswordText.length > 5)
                     and (mConfirmedPasswordText == mPasswordText)
         )
-    }
-
-    fun fetchUser() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val user = mUserRepo.fetchSelf()
-            user?.let {
-                Log.d("USER", "fetched myself from db email = ${it.email} isSelf = ${it.isSelf} auth token = ${it.authToken}")
-            }
-        }
     }
 }

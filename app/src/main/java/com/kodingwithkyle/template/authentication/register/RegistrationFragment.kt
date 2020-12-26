@@ -36,19 +36,19 @@ class RegistrationFragment : Fragment() {
 
         view.findViewById<EditText>(R.id.email_et).addTextChangedListener {
             it?.let {
-                viewModel.updateEmail(it.trim().toString())
+                viewModel.handleEmailTextChanged(it.trim().toString())
             }
         }
 
         view.findViewById<EditText>(R.id.password_et).addTextChangedListener {
             it?.let {
-                viewModel.updatePassword(it.trim().toString())
+                viewModel.handlePasswordTextChanged(it.trim().toString())
             }
         }
 
         view.findViewById<EditText>(R.id.confirm_password_et).addTextChangedListener {
             it?.let {
-                viewModel.updateConfirmedPassword(it.trim().toString())
+                viewModel.handleConfirmedPasswordTextChanged(it.trim().toString())
             }
         }
 
@@ -56,12 +56,8 @@ class RegistrationFragment : Fragment() {
             viewModel.handleRegisterButtonClick()
         }
 
-        view.findViewById<Button>(R.id.fetch_user_btn).setOnClickListener {
-            viewModel.fetchUser()
-        }
-
         view.findViewById<Button>(R.id.cancel_btn).setOnClickListener {
-            fragmentManager?.apply {
+            parentFragmentManager?.apply {
                 popBackStack()
             }
         }

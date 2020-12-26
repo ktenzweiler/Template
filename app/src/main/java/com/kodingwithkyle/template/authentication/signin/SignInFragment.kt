@@ -32,13 +32,13 @@ class SignInFragment : Fragment() {
 
         view.findViewById<EditText>(R.id.email_et).addTextChangedListener {
             it?.let {
-                viewModel.updateEmail(it.trim().toString())
+                viewModel.handleEmailTextChanged(it.trim().toString())
             }
         }
 
         view.findViewById<EditText>(R.id.password_et).addTextChangedListener {
             it?.let {
-                viewModel.updatePassword(it.trim().toString())
+                viewModel.handlePasswordTextChanged(it.trim().toString())
             }
         }
 
@@ -46,12 +46,8 @@ class SignInFragment : Fragment() {
             viewModel.handleSignInButtonClick()
         }
 
-        view.findViewById<Button>(R.id.logout_btn).setOnClickListener {
-            viewModel.handleLogoutClick()
-        }
-
         view.findViewById<Button>(R.id.register_btn).setOnClickListener {
-            fragmentManager?.apply {
+            parentFragmentManager.apply {
                 beginTransaction()
                     .add(R.id.container, RegistrationFragment.newInstance())
                     .addToBackStack(RegistrationFragment.TAG)

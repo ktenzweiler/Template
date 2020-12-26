@@ -19,23 +19,14 @@ class SignInViewModel : ViewModel() {
     val mService = AuthenticationService.AuthServiceCreator.newService()
     var mToken = ""
 
-    fun updateEmail(email: String) {
+    fun handleEmailTextChanged(email: String) {
         mEmailText = email
         checkSignInButtonEnabled()
     }
 
-    fun updatePassword(password: String) {
+    fun handlePasswordTextChanged(password: String) {
         mPasswordText = password
         checkSignInButtonEnabled()
-    }
-
-    private fun checkSignInButtonEnabled() {
-        isSignInButtonEnabled.postValue(
-            mEmailText.contains("@")
-                    and mEmailText.contains(".")
-                    and (mEmailText.length > 5)
-                    and (mPasswordText.length > 5)
-        )
     }
 
     fun handleSignInButtonClick() {
@@ -49,20 +40,17 @@ class SignInViewModel : ViewModel() {
                     Log.d("USER", "user id = ${it._id} email = ${it.email} token = ${it.authToken}")
                 }
             } else {
-                Log.d("USER", "Error msg = ${response.message()}")
+                // show failed authentication error message
             }
         }
     }
 
-    fun handleLogoutClick() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = mService.logout(mToken)
-            if (response.isSuccessful) {
-                Log.d("logout", "logged out successfully")
-            } else {
-                Log.d("logout", "Error msg = ${response.message()}")
-            }
-
-        }
+    private fun checkSignInButtonEnabled() {
+        isSignInButtonEnabled.postValue(
+            mEmailText.contains("@")
+                    and mEmailText.contains(".")
+                    and (mEmailText.length > 5)
+                    and (mPasswordText.length > 5)
+        )
     }
 }
