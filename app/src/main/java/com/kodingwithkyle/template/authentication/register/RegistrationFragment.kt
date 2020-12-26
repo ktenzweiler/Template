@@ -1,6 +1,7 @@
 package com.kodingwithkyle.template.authentication.register
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,11 +22,18 @@ class RegistrationFragment : Fragment() {
         fun newInstance() = RegistrationFragment()
     }
 
-    private val viewModel: RegistrationViewModel by viewModels {
-        RegistrationVMFactory(UserRepo(AppDatabase.getInstance(requireContext()).userDao()))
+    private val connectivityManager: ConnectivityManager by lazy {
+        requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
-    private lateinit var mRegisterButton : Button
+    private val viewModel: RegistrationViewModel by viewModels {
+        RegistrationVMFactory(
+            UserRepo(AppDatabase.getInstance(requireContext()).userDao()),
+            connectivityManager
+        )
+    }
+
+    private lateinit var mRegisterButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,9 +65,7 @@ class RegistrationFragment : Fragment() {
         }
 
         view.findViewById<Button>(R.id.cancel_btn).setOnClickListener {
-            parentFragmentManager?.apply {
-                popBackStack()
-            }
+            viewModel.handleCancelButtonClick()
         }
         return view
     }
@@ -68,6 +74,14 @@ class RegistrationFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel.isRegisterButtonEnabled.observe(viewLifecycleOwner) {
             mRegisterButton.isEnabled = it
+        }
+
+        viewModel.shouldNavigateToSignInScreen.observe(viewLifecycleOwner) {
+            if (it) {
+                parentFragmentManager.run {
+                    popBackStack()
+                }
+            }
         }
     }
 }
