@@ -1,6 +1,7 @@
 package com.kodingwithkyle.template.authentication.signin
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import com.kodingwithkyle.template.R
 import com.kodingwithkyle.template.authentication.data.AppDatabase
 import com.kodingwithkyle.template.authentication.data.models.User
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
+import com.kodingwithkyle.template.authentication.main.MainActivity
 import com.kodingwithkyle.template.authentication.register.RegistrationFragment
 
 class SignInFragment : Fragment() {
@@ -83,6 +85,12 @@ class SignInFragment : Fragment() {
                         .addToBackStack(RegistrationFragment.TAG)
                         .commit()
                 }
+            }
+        }
+        viewModel.self.observe(viewLifecycleOwner) {
+            it?.let {
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
             }
         }
     }

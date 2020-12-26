@@ -7,11 +7,7 @@ import kotlinx.coroutines.withContext
 
 class UserRepo internal constructor(private val userDao: UserDao) {
 
-    suspend fun fetchSelf() : User? {
-        return withContext(Dispatchers.IO) {
-            userDao.fetchSelf()
-        }
-    }
+    fun fetchSelf() = userDao.fetchSelf
 
     suspend fun insertUser(user: User) {
         withContext(Dispatchers.IO) {
@@ -21,7 +17,8 @@ class UserRepo internal constructor(private val userDao: UserDao) {
 
     companion object {
 
-        @Volatile private var instance: UserRepo? = null
+        @Volatile
+        private var instance: UserRepo? = null
 
         fun getInstance(userDao: UserDao) =
             instance ?: synchronized(this) {

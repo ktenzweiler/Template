@@ -18,10 +18,10 @@ class SignInViewModel internal constructor(
 
     val isSignInButtonEnabled = MutableLiveData(false)
     val shouldNavigateToRegisterScreen = MutableLiveData(false)
+    val self = userRepo.fetchSelf()
     private var mEmailText = ""
     private var mPasswordText = ""
-    val mService = AuthenticationService.AuthServiceCreator.newService()
-    var mToken = ""
+    private val mService = AuthenticationService.AuthServiceCreator.newService()
 
     fun handleEmailTextChanged(email: String) {
         mEmailText = email
@@ -38,18 +38,20 @@ class SignInViewModel internal constructor(
     }
 
     fun handleSignInButtonClick() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = mService.login(mEmailText, mPasswordText)
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    it.authToken?.let { token ->
-                        mToken = token
+        if (isInternetAvailable()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val response = mService.login(mEmailText, mPasswordText)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        it.isSelf = true
+                        userRepo.insertUser(it)
                     }
-                    Log.d("USER", "user id = ${it._id} email = ${it.email} token = ${it.authToken}")
+                } else {
+                    // show failed authentication error message
                 }
-            } else {
-                // show failed authentication error message
             }
+        } else {
+            // show error message, no internet available
         }
     }
 

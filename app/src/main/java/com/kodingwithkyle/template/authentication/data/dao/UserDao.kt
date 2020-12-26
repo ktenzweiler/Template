@@ -1,5 +1,6 @@
 package com.kodingwithkyle.template.authentication.data.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -8,8 +9,8 @@ import com.kodingwithkyle.template.authentication.data.models.User
 
 @Dao
 interface UserDao {
-    @Query("SELECT * FROM users WHERE isSelf = 1")
-    fun fetchSelf(): User?
+    @get:Query("SELECT * FROM users WHERE isSelf = 1")
+    val fetchSelf: LiveData<User>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUser(user: User)
