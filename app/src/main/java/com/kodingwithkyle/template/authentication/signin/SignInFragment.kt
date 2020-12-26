@@ -1,5 +1,8 @@
 package com.kodingwithkyle.template.authentication.signin
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +12,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import com.kodingwithkyle.template.R
+import com.kodingwithkyle.template.authentication.data.AppDatabase
+import com.kodingwithkyle.template.authentication.data.models.User
+import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 import com.kodingwithkyle.template.authentication.register.RegistrationFragment
 
 class SignInFragment : Fragment() {
@@ -19,7 +26,17 @@ class SignInFragment : Fragment() {
         fun newInstance() = SignInFragment()
     }
 
-    private lateinit var viewModel: SignInViewModel
+    private val connectivityManager: ConnectivityManager by lazy {
+        requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
+    private val viewModel: SignInViewModel by viewModels {
+        SignInVMFactory(
+            UserRepo.getInstance(AppDatabase.getInstance(requireContext()).userDao()),
+            connectivityManager
+        )
+    }
+
     private lateinit var mSignInButton: Button
 
     override fun onCreateView(
@@ -47,12 +64,7 @@ class SignInFragment : Fragment() {
         }
 
         view.findViewById<Button>(R.id.register_btn).setOnClickListener {
-            parentFragmentManager.apply {
-                beginTransaction()
-                    .add(R.id.container, RegistrationFragment.newInstance())
-                    .addToBackStack(RegistrationFragment.TAG)
-                    .commit()
-            }
+            viewModel.handleRegisterButtonClick()
         }
 
         return view
@@ -60,10 +72,18 @@ class SignInFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
-
         viewModel.isSignInButtonEnabled.observe(viewLifecycleOwner) {
             mSignInButton.isEnabled = it
+        }
+        viewModel.shouldNavigateToRegisterScreen.observe(viewLifecycleOwner) {
+            if (it) {
+                parentFragmentManager.run {
+                    beginTransaction()
+                        .add(R.id.container, RegistrationFragment.newInstance())
+                        .addToBackStack(RegistrationFragment.TAG)
+                        .commit()
+                }
+            }
         }
     }
 }
