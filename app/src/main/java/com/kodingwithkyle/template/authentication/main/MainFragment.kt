@@ -1,11 +1,7 @@
 package com.kodingwithkyle.template.authentication.main
 
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,18 +10,15 @@ import android.widget.TextView
 import androidx.fragment.app.viewModels
 import com.kodingwithkyle.template.R
 import com.kodingwithkyle.template.authentication.AuthenticationActivity
+import com.kodingwithkyle.template.authentication.base.BaseFragment
 import com.kodingwithkyle.template.authentication.data.AppDatabase
 import com.kodingwithkyle.template.authentication.data.models.User
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = MainFragment()
-    }
-
-    private val connectivityManager: ConnectivityManager by lazy {
-        requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
     private val viewModel: MainViewModel by viewModels {

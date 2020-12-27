@@ -1,20 +1,18 @@
 package com.kodingwithkyle.template.authentication.register
 
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kodingwithkyle.template.authentication.base.BaseViewModel
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
-import com.kodingwithkyle.template.authentication.services.AuthenticationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RegistrationViewModel internal constructor(
-    private val mUserRepo: UserRepo,
-    private val connectivityManager: ConnectivityManager
-) : ViewModel() {
+    userRepo: UserRepo,
+    connectivityManager: ConnectivityManager
+) : BaseViewModel(connectivityManager, userRepo) {
 
     val isRegisterButtonEnabled = MutableLiveData(false)
     val shouldNavigateToSignInScreen = MutableLiveData(false)
@@ -39,9 +37,8 @@ class RegistrationViewModel internal constructor(
 
     fun handleRegisterButtonClick() {
         if (isInternetAvailable()) {
-            val service = AuthenticationService.AuthServiceCreator.newService()
             viewModelScope.launch(Dispatchers.IO) {
-                val response = service.registerNewUser(mEmailText, mPasswordText)
+                val response = mService.registerNewUser(mEmailText, mPasswordText)
                 if (response.isSuccessful) {
                     response.body()?.let {
                         mUserRepo.insertUser(it)
@@ -69,20 +66,5 @@ class RegistrationViewModel internal constructor(
                     and (mPasswordText.length > 5)
                     and (mConfirmedPasswordText == mPasswordText)
         )
-    }
-
-    private fun isInternetAvailable(): Boolean {
-        var result = false
-        val network = connectivityManager.activeNetwork ?: return false
-        val networkCapabilities =
-            connectivityManager.getNetworkCapabilities(network) ?: return false
-        result = when {
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
-
-        return result
     }
 }

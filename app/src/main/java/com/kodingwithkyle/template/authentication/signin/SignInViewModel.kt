@@ -1,27 +1,23 @@
 package com.kodingwithkyle.template.authentication.signin
 
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kodingwithkyle.template.authentication.base.BaseViewModel
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
-import com.kodingwithkyle.template.authentication.services.AuthenticationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SignInViewModel internal constructor(
-    private val userRepo: UserRepo,
-    private val connectivityManager: ConnectivityManager
-) : ViewModel() {
+    userRepo: UserRepo,
+    connectivityManager: ConnectivityManager
+) : BaseViewModel(connectivityManager, userRepo) {
 
     val isSignInButtonEnabled = MutableLiveData(false)
     val shouldNavigateToRegisterScreen = MutableLiveData(false)
     val self = userRepo.fetchSelf()
     private var mEmailText = ""
     private var mPasswordText = ""
-    private val mService = AuthenticationService.AuthServiceCreator.newService()
 
     fun handleEmailTextChanged(email: String) {
         mEmailText = email
@@ -44,7 +40,7 @@ class SignInViewModel internal constructor(
                 if (response.isSuccessful) {
                     response.body()?.let {
                         it.isSelf = true
-                        userRepo.insertUser(it)
+                        mUserRepo.insertUser(it)
                     }
                 } else {
                     // show failed authentication error message
@@ -62,20 +58,5 @@ class SignInViewModel internal constructor(
                     and (mEmailText.length >= 5)
                     and (mPasswordText.length >= 7)
         )
-    }
-
-    private fun isInternetAvailable(): Boolean {
-        var result = false
-        val network = connectivityManager.activeNetwork ?: return false
-        val networkCapabilities =
-            connectivityManager.getNetworkCapabilities(network) ?: return false
-        result = when {
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
-        }
-
-        return result
     }
 }

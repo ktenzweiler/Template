@@ -1,12 +1,7 @@
 package com.kodingwithkyle.template.authentication.signin
 
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,21 +10,17 @@ import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.kodingwithkyle.template.R
+import com.kodingwithkyle.template.authentication.base.BaseFragment
 import com.kodingwithkyle.template.authentication.data.AppDatabase
-import com.kodingwithkyle.template.authentication.data.models.User
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 import com.kodingwithkyle.template.authentication.main.MainActivity
 import com.kodingwithkyle.template.authentication.register.RegistrationFragment
 
-class SignInFragment : Fragment() {
+class SignInFragment : BaseFragment() {
 
     companion object {
         const val TAG = "SignInFragment"
         fun newInstance() = SignInFragment()
-    }
-
-    private val connectivityManager: ConnectivityManager by lazy {
-        requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
     private val viewModel: SignInViewModel by viewModels {
