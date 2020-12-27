@@ -1,8 +1,6 @@
 package com.kodingwithkyle.template.authentication.register
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +9,11 @@ import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.kodingwithkyle.template.R
+import com.kodingwithkyle.template.authentication.base.BaseFragment
 import com.kodingwithkyle.template.authentication.data.AppDatabase
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 
-class RegistrationFragment : Fragment() {
+class RegistrationFragment : BaseFragment() {
 
     companion object {
         const val TAG = "RegistrationFragment"
@@ -22,10 +21,13 @@ class RegistrationFragment : Fragment() {
     }
 
     private val viewModel: RegistrationViewModel by viewModels {
-        RegistrationVMFactory(UserRepo(AppDatabase.getInstance(requireContext()).userDao()))
+        RegistrationVMFactory(
+            UserRepo(AppDatabase.getInstance(requireContext()).userDao()),
+            connectivityManager
+        )
     }
 
-    private lateinit var mRegisterButton : Button
+    private lateinit var mRegisterButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,19 +38,19 @@ class RegistrationFragment : Fragment() {
 
         view.findViewById<EditText>(R.id.email_et).addTextChangedListener {
             it?.let {
-                viewModel.updateEmail(it.trim().toString())
+                viewModel.handleEmailTextChanged(it.trim().toString())
             }
         }
 
         view.findViewById<EditText>(R.id.password_et).addTextChangedListener {
             it?.let {
-                viewModel.updatePassword(it.trim().toString())
+                viewModel.handlePasswordTextChanged(it.trim().toString())
             }
         }
 
         view.findViewById<EditText>(R.id.confirm_password_et).addTextChangedListener {
             it?.let {
-                viewModel.updateConfirmedPassword(it.trim().toString())
+                viewModel.handleConfirmedPasswordTextChanged(it.trim().toString())
             }
         }
 
@@ -56,14 +58,8 @@ class RegistrationFragment : Fragment() {
             viewModel.handleRegisterButtonClick()
         }
 
-        view.findViewById<Button>(R.id.fetch_user_btn).setOnClickListener {
-            viewModel.fetchUser()
-        }
-
         view.findViewById<Button>(R.id.cancel_btn).setOnClickListener {
-            fragmentManager?.apply {
-                popBackStack()
-            }
+            viewModel.handleCancelButtonClick()
         }
         return view
     }
@@ -72,6 +68,14 @@ class RegistrationFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel.isRegisterButtonEnabled.observe(viewLifecycleOwner) {
             mRegisterButton.isEnabled = it
+        }
+
+        viewModel.shouldNavigateToSignInScreen.observe(viewLifecycleOwner) {
+            if (it) {
+                parentFragmentManager.run {
+                    popBackStack()
+                }
+            }
         }
     }
 }

@@ -1,25 +1,35 @@
 package com.kodingwithkyle.template.authentication.signin
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import com.kodingwithkyle.template.R
+import com.kodingwithkyle.template.authentication.base.BaseFragment
+import com.kodingwithkyle.template.authentication.data.AppDatabase
+import com.kodingwithkyle.template.authentication.data.repo.UserRepo
+import com.kodingwithkyle.template.authentication.main.MainActivity
 import com.kodingwithkyle.template.authentication.register.RegistrationFragment
 
-class SignInFragment : Fragment() {
+class SignInFragment : BaseFragment() {
 
     companion object {
         const val TAG = "SignInFragment"
         fun newInstance() = SignInFragment()
     }
 
-    private lateinit var viewModel: SignInViewModel
+    private val viewModel: SignInViewModel by viewModels {
+        SignInVMFactory(
+            UserRepo.getInstance(AppDatabase.getInstance(requireContext()).userDao()),
+            connectivityManager
+        )
+    }
+
     private lateinit var mSignInButton: Button
 
     override fun onCreateView(
@@ -32,13 +42,13 @@ class SignInFragment : Fragment() {
 
         view.findViewById<EditText>(R.id.email_et).addTextChangedListener {
             it?.let {
-                viewModel.updateEmail(it.trim().toString())
+                viewModel.handleEmailTextChanged(it.trim().toString())
             }
         }
 
         view.findViewById<EditText>(R.id.password_et).addTextChangedListener {
             it?.let {
-                viewModel.updatePassword(it.trim().toString())
+                viewModel.handlePasswordTextChanged(it.trim().toString())
             }
         }
 
@@ -46,17 +56,8 @@ class SignInFragment : Fragment() {
             viewModel.handleSignInButtonClick()
         }
 
-        view.findViewById<Button>(R.id.logout_btn).setOnClickListener {
-            viewModel.handleLogoutClick()
-        }
-
         view.findViewById<Button>(R.id.register_btn).setOnClickListener {
-            fragmentManager?.apply {
-                beginTransaction()
-                    .add(R.id.container, RegistrationFragment.newInstance())
-                    .addToBackStack(RegistrationFragment.TAG)
-                    .commit()
-            }
+            viewModel.handleRegisterButtonClick()
         }
 
         return view
@@ -64,10 +65,24 @@ class SignInFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
-
         viewModel.isSignInButtonEnabled.observe(viewLifecycleOwner) {
             mSignInButton.isEnabled = it
+        }
+        viewModel.shouldNavigateToRegisterScreen.observe(viewLifecycleOwner) {
+            if (it) {
+                parentFragmentManager.run {
+                    beginTransaction()
+                        .add(R.id.container, RegistrationFragment.newInstance())
+                        .addToBackStack(RegistrationFragment.TAG)
+                        .commit()
+                }
+            }
+        }
+        viewModel.self.observe(viewLifecycleOwner) {
+            it?.let {
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 }

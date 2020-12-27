@@ -1,49 +1,61 @@
 package com.kodingwithkyle.template.authentication.register
 
+import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kodingwithkyle.template.authentication.base.BaseViewModel
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
-import com.kodingwithkyle.template.authentication.services.AuthenticationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class RegistrationViewModel internal constructor(private val mUserRepo: UserRepo) : ViewModel() {
+class RegistrationViewModel internal constructor(
+    userRepo: UserRepo,
+    connectivityManager: ConnectivityManager
+) : BaseViewModel(connectivityManager, userRepo) {
 
     val isRegisterButtonEnabled = MutableLiveData(false)
+    val shouldNavigateToSignInScreen = MutableLiveData(false)
     private var mEmailText = ""
     private var mPasswordText = ""
     private var mConfirmedPasswordText = ""
 
-    fun updateEmail(email: String) {
+    fun handleEmailTextChanged(email: String) {
         mEmailText = email
         checkIsRegisterButtonEnabled()
     }
 
-    fun updatePassword(password: String) {
+    fun handlePasswordTextChanged(password: String) {
         mPasswordText = password
         checkIsRegisterButtonEnabled()
     }
 
-    fun updateConfirmedPassword(confirmedPassword: String) {
+    fun handleConfirmedPasswordTextChanged(confirmedPassword: String) {
         mConfirmedPasswordText = confirmedPassword
         checkIsRegisterButtonEnabled()
     }
 
     fun handleRegisterButtonClick() {
-        val service = AuthenticationService.AuthServiceCreator.newService()
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = service.registerNewUser(mEmailText, mPasswordText)
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    it.isSelf = true
-                    mUserRepo.insertUser(it)
+        if (isInternetAvailable()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val response = mService.registerNewUser(mEmailText, mPasswordText)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        mUserRepo.insertUser(it)
+                        shouldNavigateToSignInScreen.postValue(true)
+                    }
+                } else {
+                    // show error message
+                    Log.d("USER", "Error msg = ${response.message()}")
                 }
-            } else {
-                Log.d("USER", "Error msg = ${response.message()}")
             }
+        } else {
+            // show error message, no internet available
         }
+    }
+
+    fun handleCancelButtonClick() {
+        shouldNavigateToSignInScreen.postValue(true)
     }
 
     private fun checkIsRegisterButtonEnabled() {
@@ -54,14 +66,5 @@ class RegistrationViewModel internal constructor(private val mUserRepo: UserRepo
                     and (mPasswordText.length > 5)
                     and (mConfirmedPasswordText == mPasswordText)
         )
-    }
-
-    fun fetchUser() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val user = mUserRepo.fetchSelf()
-            user?.let {
-                Log.d("USER", "fetched myself from db email = ${it.email} isSelf = ${it.isSelf} auth token = ${it.authToken}")
-            }
-        }
     }
 }
