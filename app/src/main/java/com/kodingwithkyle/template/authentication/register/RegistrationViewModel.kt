@@ -4,7 +4,10 @@ import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.kodingwithkyle.template.authentication.base.BaseViewModel
+import com.kodingwithkyle.template.authentication.data.models.ErrorMessage
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,13 +50,13 @@ class RegistrationViewModel internal constructor(
                         shouldNavigateToSignInScreen.postValue(true)
                     }
                 } else {
-                    // show error message
-                    Log.d("USER", "Error msg = ${response.message()}")
                     shouldShowProgressBar.postValue(false)
+                    val errorMessage = parseErrorMessage(response.errorBody())
+                    shouldShowErrorDialog.postValue(errorMessage)
                 }
             }
         } else {
-            // show error message, no internet available
+            shouldShowErrorDialog.postValue(ErrorMessage("No Internet Available"))
         }
     }
 

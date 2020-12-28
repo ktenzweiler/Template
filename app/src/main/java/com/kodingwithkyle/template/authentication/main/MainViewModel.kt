@@ -4,6 +4,7 @@ import android.net.ConnectivityManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kodingwithkyle.template.authentication.base.BaseViewModel
+import com.kodingwithkyle.template.authentication.data.models.ErrorMessage
 import com.kodingwithkyle.template.authentication.data.models.User
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 import kotlinx.coroutines.Dispatchers
@@ -29,10 +30,12 @@ class MainViewModel internal constructor(
                 } else {
                     // show error message, could not logout
                     shouldShowProgressBar.postValue(false)
+                    val errorMessage = parseErrorMessage(response.errorBody())
+                    shouldShowErrorDialog.postValue(errorMessage)
                 }
             }
         } else {
-            // show error message, no internet available
+            shouldShowErrorDialog.postValue(ErrorMessage("No Internet Available"))
         }
     }
 }
