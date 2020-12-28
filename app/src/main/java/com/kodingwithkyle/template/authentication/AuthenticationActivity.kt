@@ -1,7 +1,7 @@
 package com.kodingwithkyle.template.authentication
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.kodingwithkyle.template.R
 import com.kodingwithkyle.template.authentication.signin.SignInFragment
 

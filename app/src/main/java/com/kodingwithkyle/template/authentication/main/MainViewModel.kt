@@ -15,7 +15,6 @@ class MainViewModel internal constructor(
     connectivityManager: ConnectivityManager
 ) : BaseViewModel(connectivityManager, userRepo) {
 
-    val self = userRepo.fetchSelf()
     val shouldNavigateToLogin = MutableLiveData(false)
 
     fun handleLogoutButtonClick(self: User) {

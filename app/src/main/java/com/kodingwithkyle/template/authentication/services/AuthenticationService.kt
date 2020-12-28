@@ -52,7 +52,7 @@ interface AuthenticationService {
             httpBuilder.readTimeout(30, TimeUnit.SECONDS)
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://server-template-1.herokuapp.com")
+                .baseUrl("")
                 .addConverterFactory(GsonConverterFactory.create(Gson()))
                 .client(httpBuilder.build())
                 .build()

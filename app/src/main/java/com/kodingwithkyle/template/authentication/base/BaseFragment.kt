@@ -2,7 +2,6 @@ package com.kodingwithkyle.template.authentication.base
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment

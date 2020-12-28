@@ -8,9 +8,9 @@ import com.kodingwithkyle.template.authentication.data.dao.UserDao
 import com.kodingwithkyle.template.authentication.data.models.User
 
 @Database(entities = [User::class], version = 1, exportSchema = false)
-abstract class AppDatabase: RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun userDao() : UserDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile

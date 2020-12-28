@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.viewModels
 import com.kodingwithkyle.template.R
 import com.kodingwithkyle.template.authentication.AuthenticationActivity
@@ -28,7 +27,7 @@ class MainFragment : BaseFragment() {
         )
     }
 
-    lateinit var mUser : User
+    lateinit var mUser: User
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,12 +43,6 @@ class MainFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.self.observe(viewLifecycleOwner) {
-            it?.let {
-                mUser = it
-                view?.findViewById<TextView>(R.id.email_tv)?.text = it.email
-            }
-        }
         viewModel.shouldNavigateToLogin.observe(viewLifecycleOwner) {
             if (it) {
                 val intent = Intent(requireContext(), AuthenticationActivity::class.java)
