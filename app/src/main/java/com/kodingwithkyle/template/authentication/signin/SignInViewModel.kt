@@ -36,6 +36,7 @@ class SignInViewModel internal constructor(
     fun handleSignInButtonClick() {
         if (isInternetAvailable()) {
             viewModelScope.launch(Dispatchers.IO) {
+                shouldShowProgressBar.postValue(true)
                 val response = mService.login(mEmailText, mPasswordText)
                 if (response.isSuccessful) {
                     response.body()?.let {
@@ -45,6 +46,7 @@ class SignInViewModel internal constructor(
                 } else {
                     // show failed authentication error message
                 }
+                shouldShowProgressBar.postValue(false)
             }
         } else {
             // show error message, no internet available

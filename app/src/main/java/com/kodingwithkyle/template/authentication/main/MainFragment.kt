@@ -35,6 +35,7 @@ class MainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.main_fragment, container, false)
+        mProgressLayout = view.findViewById(R.id.progress_layout)
         view.findViewById<Button>(R.id.logout_btn).setOnClickListener {
             viewModel.handleLogoutButtonClick(mUser)
         }
@@ -53,6 +54,13 @@ class MainFragment : BaseFragment() {
             if (it) {
                 val intent = Intent(requireContext(), AuthenticationActivity::class.java)
                 startActivity(intent)
+            }
+        }
+        viewModel.shouldShowProgressBar.observe(viewLifecycleOwner) {
+            if (it) {
+                mProgressLayout.visibility = View.VISIBLE
+            } else {
+                mProgressLayout.visibility = View.GONE
             }
         }
     }

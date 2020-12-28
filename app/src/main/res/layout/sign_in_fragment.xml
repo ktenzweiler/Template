@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".authentication.signin.SignInFragment">
 
+    <include layout="@layout/progress_layout" />
+
     <EditText
         android:id="@+id/email_et"
         android:layout_width="0dp"

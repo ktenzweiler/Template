@@ -20,13 +20,15 @@ class MainViewModel internal constructor(
     fun handleLogoutButtonClick(self: User) {
         if (isInternetAvailable()) {
             viewModelScope.launch(Dispatchers.IO) {
+                shouldShowProgressBar.postValue(true)
                 val response = mService.logout(self.authToken!!)
                 if (response.isSuccessful) {
-                    val newSelf = User(self._id, self.email, "", false)
-                    mUserRepo.insertUser(newSelf)
+                    mUserRepo.deleteUser(self)
+                    shouldShowProgressBar.postValue(false)
                     shouldNavigateToLogin.postValue(true)
                 } else {
                     // show error message, could not logout
+                    shouldShowProgressBar.postValue(false)
                 }
             }
         } else {

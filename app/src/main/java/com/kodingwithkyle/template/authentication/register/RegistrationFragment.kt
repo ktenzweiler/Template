@@ -35,6 +35,7 @@ class RegistrationFragment : BaseFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.registration_fragment, container, false)
         mRegisterButton = view.findViewById(R.id.register_btn)
+        mProgressLayout = view.findViewById(R.id.progress_layout)
 
         view.findViewById<EditText>(R.id.email_et).addTextChangedListener {
             it?.let {
@@ -75,6 +76,14 @@ class RegistrationFragment : BaseFragment() {
                 parentFragmentManager.run {
                     popBackStack()
                 }
+            }
+        }
+
+        viewModel.shouldShowProgressBar.observe(viewLifecycleOwner) {
+            if (it) {
+                mProgressLayout.visibility = View.VISIBLE
+            } else {
+                mProgressLayout.visibility = View.GONE
             }
         }
     }

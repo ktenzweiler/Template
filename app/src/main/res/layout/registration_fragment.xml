@@ -8,6 +8,7 @@
     android:id="@+id/registration"
     tools:context=".authentication.register.RegistrationFragment">
 
+    <include layout="@layout/progress_layout" />
 
     <EditText
         android:id="@+id/email_et"

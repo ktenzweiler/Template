@@ -38,15 +38,18 @@ class RegistrationViewModel internal constructor(
     fun handleRegisterButtonClick() {
         if (isInternetAvailable()) {
             viewModelScope.launch(Dispatchers.IO) {
+                shouldShowProgressBar.postValue(true)
                 val response = mService.registerNewUser(mEmailText, mPasswordText)
                 if (response.isSuccessful) {
                     response.body()?.let {
                         mUserRepo.insertUser(it)
+                        shouldShowProgressBar.postValue(false)
                         shouldNavigateToSignInScreen.postValue(true)
                     }
                 } else {
                     // show error message
                     Log.d("USER", "Error msg = ${response.message()}")
+                    shouldShowProgressBar.postValue(false)
                 }
             }
         } else {
@@ -62,8 +65,8 @@ class RegistrationViewModel internal constructor(
         isRegisterButtonEnabled.postValue(
             mEmailText.contains("@")
                     and mEmailText.contains(".")
-                    and (mEmailText.length > 5)
-                    and (mPasswordText.length > 5)
+                    and (mEmailText.length >= 5)
+                    and (mPasswordText.length >= 7)
                     and (mConfirmedPasswordText == mPasswordText)
         )
     }

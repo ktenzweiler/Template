@@ -15,6 +15,12 @@ class UserRepo internal constructor(private val userDao: UserDao) {
         }
     }
 
+    suspend fun deleteUser(user: User) {
+        withContext(Dispatchers.IO) {
+            userDao.deleteUser(user)
+        }
+    }
+
     companion object {
 
         @Volatile

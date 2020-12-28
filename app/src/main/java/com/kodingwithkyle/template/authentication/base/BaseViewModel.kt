@@ -2,6 +2,7 @@ package com.kodingwithkyle.template.authentication.base
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 import com.kodingwithkyle.template.authentication.services.AuthenticationService
@@ -13,6 +14,7 @@ abstract class BaseViewModel constructor(
     ViewModel() {
 
     val mService = AuthenticationService.AuthServiceCreator.newService()
+    val shouldShowProgressBar = MutableLiveData(false)
 
     fun isInternetAvailable(): Boolean {
         var result = false

@@ -37,7 +37,7 @@ class SignInFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.sign_in_fragment, container, false)
-
+        mProgressLayout = view.findViewById(R.id.progress_layout)
         mSignInButton = view.findViewById(R.id.sign_in_btn)
 
         view.findViewById<EditText>(R.id.email_et).addTextChangedListener {
@@ -82,6 +82,13 @@ class SignInFragment : BaseFragment() {
             it?.let {
                 val intent = Intent(requireContext(), MainActivity::class.java)
                 startActivity(intent)
+            }
+        }
+        viewModel.shouldShowProgressBar.observe(viewLifecycleOwner) {
+            if (it) {
+                mProgressLayout.visibility = View.VISIBLE
+            } else {
+                mProgressLayout.visibility = View.GONE
             }
         }
     }
