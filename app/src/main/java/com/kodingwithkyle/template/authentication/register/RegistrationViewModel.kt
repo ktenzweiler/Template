@@ -1,11 +1,8 @@
 package com.kodingwithkyle.template.authentication.register
 
 import android.net.ConnectivityManager
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.kodingwithkyle.template.authentication.base.BaseViewModel
 import com.kodingwithkyle.template.authentication.data.models.ErrorMessage
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo

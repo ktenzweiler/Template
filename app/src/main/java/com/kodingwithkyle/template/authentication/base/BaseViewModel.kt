@@ -22,18 +22,15 @@ abstract class BaseViewModel constructor(
     val shouldShowErrorDialog = MutableLiveData<ErrorMessage>()
 
     fun isInternetAvailable(): Boolean {
-        var result = false
         val network = connectivityManager.activeNetwork ?: return false
         val networkCapabilities =
             connectivityManager.getNetworkCapabilities(network) ?: return false
-        result = when {
+        return when {
             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
             else -> false
         }
-
-        return result
     }
 
     fun parseErrorMessage(responseBody: ResponseBody?): ErrorMessage? {
