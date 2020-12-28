@@ -91,5 +91,10 @@ class SignInFragment : BaseFragment() {
                 mProgressLayout.visibility = View.GONE
             }
         }
+        viewModel.shouldShowErrorDialog.observe(viewLifecycleOwner) {
+            it?.let {
+                showDialog("Error", it.Error)
+            }
+        }
     }
 }

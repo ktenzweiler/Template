@@ -4,6 +4,7 @@ import android.net.ConnectivityManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kodingwithkyle.template.authentication.base.BaseViewModel
+import com.kodingwithkyle.template.authentication.data.models.ErrorMessage
 import com.kodingwithkyle.template.authentication.data.repo.UserRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,13 +44,15 @@ class SignInViewModel internal constructor(
                         it.isSelf = true
                         mUserRepo.insertUser(it)
                     }
+                    shouldShowProgressBar.postValue(false)
                 } else {
-                    // show failed authentication error message
+                    val errorMessage = parseErrorMessage(response.errorBody())
+                    shouldShowProgressBar.postValue(false)
+                    shouldShowErrorDialog.postValue(errorMessage)
                 }
-                shouldShowProgressBar.postValue(false)
             }
         } else {
-            // show error message, no internet available
+            shouldShowErrorDialog.postValue(ErrorMessage("No internet connection"))
         }
     }
 
