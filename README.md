@@ -14,4 +14,5 @@ To get started using this template:
 2)Enter an application id of your choosing in build.gradle <applicationId "com.android.myprojectname">
 3)Enter that same application id in the package name in Manifest.xml
 4)Refactor your package names accoding to the app id(build.gradle) & package name(Manifest.xml) you specified
-5)Have Fun!
+5)Update the App Name
+6)add your base url
