@@ -1,4 +1,4 @@
-package com.kodingwithkyle.template.authentication.base
+package com.kodingwithkyle.template.base
 
 import android.content.Context
 import android.net.ConnectivityManager

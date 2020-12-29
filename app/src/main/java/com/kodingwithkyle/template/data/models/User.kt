@@ -1,4 +1,4 @@
-package com.kodingwithkyle.template.authentication.data.models
+package com.kodingwithkyle.template.data.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

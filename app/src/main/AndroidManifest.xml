@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Template" >
-        <activity android:name=".authentication.main.MainActivity" >
+        <activity android:name="com.kodingwithkyle.template.main.MainActivity" >
         </activity>
         <activity android:name=".authentication.AuthenticationActivity" >
             <intent-filter>

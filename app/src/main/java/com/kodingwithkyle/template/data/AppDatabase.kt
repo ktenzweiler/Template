@@ -1,11 +1,11 @@
-package com.kodingwithkyle.template.authentication.data
+package com.kodingwithkyle.template.data
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.kodingwithkyle.template.authentication.data.dao.UserDao
-import com.kodingwithkyle.template.authentication.data.models.User
+import com.kodingwithkyle.template.data.dao.UserDao
+import com.kodingwithkyle.template.data.models.User
 
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
