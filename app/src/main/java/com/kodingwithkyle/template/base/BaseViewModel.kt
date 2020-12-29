@@ -1,4 +1,4 @@
-package com.kodingwithkyle.template.authentication.base
+package com.kodingwithkyle.template.base
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kodingwithkyle.template.authentication.data.models.ErrorMessage
-import com.kodingwithkyle.template.authentication.data.repo.UserRepo
-import com.kodingwithkyle.template.authentication.services.AuthenticationService
+import com.kodingwithkyle.template.data.models.ErrorMessage
+import com.kodingwithkyle.template.data.repo.UserRepo
+import com.kodingwithkyle.template.services.AuthenticationService
 import okhttp3.ResponseBody
 
 abstract class BaseViewModel constructor(

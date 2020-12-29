@@ -9,9 +9,9 @@ import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.kodingwithkyle.template.R
-import com.kodingwithkyle.template.authentication.base.BaseFragment
-import com.kodingwithkyle.template.authentication.data.AppDatabase
-import com.kodingwithkyle.template.authentication.data.repo.UserRepo
+import com.kodingwithkyle.template.base.BaseFragment
+import com.kodingwithkyle.template.data.AppDatabase
+import com.kodingwithkyle.template.data.repo.UserRepo
 
 class RegistrationFragment : BaseFragment() {
 

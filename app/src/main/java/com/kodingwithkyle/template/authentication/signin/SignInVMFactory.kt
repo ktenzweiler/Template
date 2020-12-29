@@ -3,7 +3,7 @@ package com.kodingwithkyle.template.authentication.signin
 import android.net.ConnectivityManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.kodingwithkyle.template.authentication.data.repo.UserRepo
+import com.kodingwithkyle.template.data.repo.UserRepo
 
 class SignInVMFactory(
     private val userRepo: UserRepo,

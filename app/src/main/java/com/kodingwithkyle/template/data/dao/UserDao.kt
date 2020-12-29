@@ -1,8 +1,8 @@
-package com.kodingwithkyle.template.authentication.data.dao
+package com.kodingwithkyle.template.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.kodingwithkyle.template.authentication.data.models.User
+import com.kodingwithkyle.template.data.models.User
 
 @Dao
 interface UserDao {
