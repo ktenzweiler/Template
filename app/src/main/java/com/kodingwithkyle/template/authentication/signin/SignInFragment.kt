@@ -10,11 +10,11 @@ import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.kodingwithkyle.template.R
-import com.kodingwithkyle.template.authentication.base.BaseFragment
-import com.kodingwithkyle.template.authentication.data.AppDatabase
-import com.kodingwithkyle.template.authentication.data.repo.UserRepo
-import com.kodingwithkyle.template.authentication.main.MainActivity
+import com.kodingwithkyle.template.data.AppDatabase
+import com.kodingwithkyle.template.data.repo.UserRepo
+import com.kodingwithkyle.template.main.MainActivity
 import com.kodingwithkyle.template.authentication.register.RegistrationFragment
+import com.kodingwithkyle.template.base.BaseFragment
 
 class SignInFragment : BaseFragment() {
 

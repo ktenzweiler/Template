@@ -1,12 +1,12 @@
-package com.kodingwithkyle.template.authentication.main
+package com.kodingwithkyle.template.main
 
 import android.net.ConnectivityManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.kodingwithkyle.template.authentication.base.BaseViewModel
-import com.kodingwithkyle.template.authentication.data.models.ErrorMessage
-import com.kodingwithkyle.template.authentication.data.models.User
-import com.kodingwithkyle.template.authentication.data.repo.UserRepo
+import com.kodingwithkyle.template.base.BaseViewModel
+import com.kodingwithkyle.template.data.models.ErrorMessage
+import com.kodingwithkyle.template.data.models.User
+import com.kodingwithkyle.template.data.repo.UserRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,7 @@
-package com.kodingwithkyle.template.authentication.data.repo
+package com.kodingwithkyle.template.data.repo
 
-import com.kodingwithkyle.template.authentication.data.dao.UserDao
-import com.kodingwithkyle.template.authentication.data.models.User
+import com.kodingwithkyle.template.data.dao.UserDao
+import com.kodingwithkyle.template.data.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

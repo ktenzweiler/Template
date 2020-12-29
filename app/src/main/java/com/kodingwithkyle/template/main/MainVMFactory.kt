@@ -1,9 +1,9 @@
-package com.kodingwithkyle.template.authentication.main
+package com.kodingwithkyle.template.main
 
 import android.net.ConnectivityManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.kodingwithkyle.template.authentication.data.repo.UserRepo
+import com.kodingwithkyle.template.data.repo.UserRepo
 
 class MainVMFactory(
     private val userRepo: UserRepo,

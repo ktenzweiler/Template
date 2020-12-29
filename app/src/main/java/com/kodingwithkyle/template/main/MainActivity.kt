@@ -1,4 +1,4 @@
-package com.kodingwithkyle.template.authentication.main
+package com.kodingwithkyle.template.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

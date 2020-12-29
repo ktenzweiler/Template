@@ -1,7 +1,7 @@
-package com.kodingwithkyle.template.authentication.services
+package com.kodingwithkyle.template.services
 
 import com.google.gson.Gson
-import com.kodingwithkyle.template.authentication.data.models.User
+import com.kodingwithkyle.template.data.models.User
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -52,7 +52,7 @@ interface AuthenticationService {
             httpBuilder.readTimeout(30, TimeUnit.SECONDS)
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("")
+                .baseUrl("https://server-template-1.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create(Gson()))
                 .client(httpBuilder.build())
                 .build()
